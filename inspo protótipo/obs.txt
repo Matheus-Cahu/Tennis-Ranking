@@ -1,0 +1,38 @@
+Splash:
+1- Criar logo
+2- Entrar abaixo de Cadastre-se
+
+Cadastro:
+1- Apenas nome e sobrenome, email, whatsapp e senha.
+2- Demais informações devem ser passadas pra página de perfil
+
+Login:
+N/A
+
+Ranking:
+1- Tirar Amigos
+2- Passar btn de desafio do feed para rankgin
+
+Meu Perfil:
+N/A
+
+Histórico de Jogos:
+N/A
+
+Feed:
+1- Mudar para padrão de post lets play (fotos de perfil e resultado).
+
+Financeiro:
+1- Add "cancelar assinatura".
+
+Empresas Parceiras:
+1- Como gerar um código de desconto.
+
+Classificados:
+N/A
+
+Notificações:
+1- Tirar categorias de notificações 
+
+Loja do app:
+1- Remover bandeiras do cartão

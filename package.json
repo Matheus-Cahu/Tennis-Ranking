@@ -1,0 +1,22 @@
+{
+  "name": "tennisranking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "mobile": "npm run dev --prefix apps/mobile",
+    "api": "npm run dev --prefix apps/api"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matheus-Cahu/Tennis-Ranking.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Matheus-Cahu/Tennis-Ranking/issues"
+  },
+  "homepage": "https://github.com/Matheus-Cahu/Tennis-Ranking#readme"
+}
