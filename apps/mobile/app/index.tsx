@@ -18,7 +18,7 @@ export default function SplashScreen() {
 
   return (
     <ImageBackground 
-      source={require('../../assets/images/splash.png')} 
+      source={require('../assets/images/splash.png')} 
       style={styles.background}
       resizeMode="cover"
     >
@@ -28,7 +28,7 @@ export default function SplashScreen() {
         {/* Logo e Nome do App */}
         <View style={styles.header}>
           <Image 
-            source={require('../../assets/images/android-icon-background.png')} 
+            source={require('../assets/images/android-icon-background.png')} 
             style={styles.logo} 
           />
           <Text style={styles.logoText}>TENNIS RANK</Text>
