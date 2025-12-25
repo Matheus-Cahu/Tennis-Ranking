@@ -15,21 +15,31 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
+
       }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
+      <Tabs
+  screenOptions={{
+    tabBarActiveTintColor: '#FF7A21', // Laranja do design
+    headerShown: false,
+  }}>
+  {/* O 'name' deve ser idêntico ao nome do arquivo .tsx */}
+  <Tabs.Screen
+    name="feed" 
+    options={{ title: 'Home' }}
+  />
+  <Tabs.Screen
+    name="ranking"
+    options={{ title: 'Ranking' }}
+  />
+  <Tabs.Screen
+    name="Notifications"
+    options={{ title: 'Notificações' }}
+  />
+  <Tabs.Screen
+    name="profile"
+    options={{ title: 'Perfil' }}
+  />
+</Tabs>
     </Tabs>
   );
 }

@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/Matheus-Cahu/Tennis-Ranking/issues"
   },
-  "homepage": "https://github.com/Matheus-Cahu/Tennis-Ranking#readme"
+  "homepage": "https://github.com/Matheus-Cahu/Tennis-Ranking#readme",
+  "dependencies": {
+    "expo": "^54.0.30",
+    "react-native-svg": "15.12.1"
+  }
 }
