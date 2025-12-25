@@ -5,6 +5,7 @@ import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Home, Trophy, Bell, User } from 'lucide-react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,34 +13,44 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        // Define o laranja como cor ativa conforme o design
+        tabBarActiveTintColor: '#FF7A21', 
+        tabBarInactiveTintColor: '#888',
         headerShown: false,
         tabBarButton: HapticTab,
-
       }}>
-      <Tabs
-  screenOptions={{
-    tabBarActiveTintColor: '#FF7A21', // Laranja do design
-    headerShown: false,
-  }}>
-  {/* O 'name' deve ser idêntico ao nome do arquivo .tsx */}
-  <Tabs.Screen
-    name="feed" 
-    options={{ title: 'Home' }}
-  />
-  <Tabs.Screen
-    name="ranking"
-    options={{ title: 'Ranking' }}
-  />
-  <Tabs.Screen
-    name="Notifications"
-    options={{ title: 'Notificações' }}
-  />
-  <Tabs.Screen
-    name="profile"
-    options={{ title: 'Perfil' }}
-  />
-</Tabs>
+      
+      <Tabs.Screen
+        name="feed"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size }) => <Home size={size} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="ranking"
+        options={{
+          title: 'Ranking',
+          tabBarIcon: ({ color, size }) => <Trophy size={size} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="notifications" // Use minúsculo para bater com o arquivo físico
+        options={{
+          title: 'Notificações',
+          tabBarIcon: ({ color, size }) => <Bell size={size} color={color} />,
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          tabBarIcon: ({ color, size }) => <User size={size} color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
