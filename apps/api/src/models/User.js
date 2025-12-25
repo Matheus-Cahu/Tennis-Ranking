@@ -30,24 +30,6 @@ const UserSchema = new mongoose.Schema({
       type: String,
       enum: ['Masculino', 'Feminino', 'Outro'], // Conforme opções do protótipo
       required: true
-    },
-    play_style: {
-      type: String,
-      enum: ['Destro', 'Canhoto'], // Braço dominante
-      required: true
-    },
-    backhand: {
-      type: String,
-      enum: ['1 Mão', '2 Mãos'], // Tipo de backhand
-      required: true
-    },
-    height: {
-      type: Number, // Armazenado em cm
-      required: false
-    },
-    weight: {
-      type: Number, // Armazenado em kg
-      required: false
     }
   },
 

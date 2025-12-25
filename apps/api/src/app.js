@@ -5,91 +5,122 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 
-const User = require('./models/User'); // Importe o model
+// Importação dos Modelos
+const User = require('./models/User'); 
+const Profile = require('./models/Profile');
 
 const app = express();
+
+// Ligação à Base de Dados
 connectDB();
 
+// Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Essencial para ler o corpo das requisições JSON
 
-// Rota de Cadastro de Teste
+// --- ROTAS DE UTILIZADOR ---
+
+/**
+ * Rota de Registo: Cria um utilizador e um perfil associado
+ */
 app.post('/api/users/register', async (req, res) => {
   try {
-    const { name, email, password, gender, play_style, backhand } = req.body;
-    
-    // Cria o usuário no MongoDB
+    const { name, email, password, player_info } = req.body;
+
+    // 1. Criar o Utilizador no MongoDB
+    // O campo player_info.gender é obrigatório conforme o User.js
     const newUser = await User.create({
       name,
       email,
-      password, // Lembrete: em produção, use bcrypt para criptografar!
-      player_info: { gender, play_style, backhand }
+      password, // Nota: Em produção, aplique bcrypt.hash aqui
+      player_info: { 
+        gender: player_info?.gender 
+      }
     });
 
-    res.status(201).json({ message: "Usuário criado!", user: newUser });
+    // 2. Criar o Perfil vinculado ao ID do novo utilizador
+    // Preenchemos com os dados de jogo enviados ou valores padrão
+    const newProfile = await Profile.create({
+      user: newUser._id,
+      play_style: player_info?.play_style || 'Destro',
+      backhand: player_info?.backhand || '2 Mãos',
+      category: 'Iniciante'
+    });
+
+    res.status(201).json({ 
+      msg: "Usuário e Perfil criados com sucesso!", 
+      user: newUser,
+      profile: newProfile 
+    });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: "Erro ao criar usuário", error: error.message });
+    console.error("Erro no Registro:", error.message);
+    res.status(400).json({ msg: "Erro ao criar usuário e perfil", error: error.message });
   }
 });
 
-// Rota de Login
+/**
+ * Rota de Login
+ */
 app.post('/api/users/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // 1. Busca o usuário e força a seleção da senha (que está como select: false no Model)
+    // Busca o utilizador e força a seleção da senha (select: false no Model)
     const user = await User.findOne({ email }).select('+password');
 
     if (!user) {
-      return res.status(401).json({ message: "E-mail ou senha incorretos." });
+      return res.status(401).json({ msg: "E-mail ou senha incorretos." });
     }
 
-    // 2. Verifica a senha (comparação simples por enquanto)
+    // Verificação simples de senha
     if (user.password !== password) {
-      return res.status(401).json({ message: "E-mail ou senha incorretos." });
+      return res.status(401).json({ msg: "E-mail ou senha incorretos." });
     }
 
-    // 3. Remove a senha do objeto de resposta por segurança
+    // Remove a senha do objeto de resposta por segurança
     const userResponse = user.toObject();
     delete userResponse.password;
 
     res.status(200).json({ 
-      message: "Login realizado com sucesso!", 
+      msg: "Login realizado com sucesso!", 
       user: userResponse 
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Erro interno no servidor." });
+    res.status(500).json({ msg: "Erro interno no servidor." });
   }
 });
 
+/**
+ * Rota de Ranking: Lista todos os utilizadores ordenados por pontos
+ */
 app.get('/api/users', async (req, res) => {
   try {
-    // Busca usuários ativos, ordenando pelos que têm mais pontos (Ranking)
     const users = await User.find({ active: true })
       .sort({ points: -1 }) 
-      .select('-password'); // Nunca envia a senha, mesmo criptografada
+      .select('-password'); 
 
     res.status(200).json(users);
   } catch (error) {
     console.error("Erro ao buscar usuários:", error);
-    res.status(500).json({ message: "Erro ao carregar ranking." });
+    res.status(500).json({ msg: "Erro ao carregar ranking." });
   }
 });
 
-// ROTA DE BUSCA POR ID (Para a tela de perfil de outros jogadores)
+/**
+ * Rota de Detalhes: Busca um utilizador específico pelo ID
+ */
 app.get('/api/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+    if (!user) return res.status(404).json({ msg: "Usuário não encontrado" });
     
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar detalhes do usuário." });
+    res.status(500).json({ msg: "Erro ao buscar detalhes do usuário." });
   }
 });
 
-
-const PORT = 3000;
-app.listen(PORT, () => console.log(`🚀 Servidor na porta ${PORT}`));
+// Configuração da Porta
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Servidor a correr na porta ${PORT}`));

@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
-  Alert // Importado para feedbacks
+  Alert 
 } from 'react-native';
 import { useRouter, Stack } from 'expo-router';
 import MainInput from '@/components/inputs/main-input';
@@ -17,16 +17,18 @@ import MainButton from '@/components/buttons/main-button';
 
 export default function RegisterScreen() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false); // Estado para o botão
+  const [loading, setLoading] = useState(false);
+  
+  // Novo estado para o Toggle de Gênero
+  const [gender, setGender] = useState('Masculino'); 
+  
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
     senha: '',
   });
 
-  // Função para conectar com a API
   const handleRegister = async () => {
-    // Validação básica
     if (!formData.nome || !formData.email || !formData.senha) {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
@@ -35,20 +37,19 @@ export default function RegisterScreen() {
     setLoading(true);
 
     try {
-      // Substitua pelo IP da sua máquina se testar em dispositivo físico (ex: 192.168.x.x)
       const response = await fetch('http://192.168.12.10:3000/api/users/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.nome,
           email: formData.email,
           password: formData.senha,
-          // Enviando valores padrão iniciais para o Profile (serão editados depois)
-          gender: 'Outro', 
-          play_style: 'Destro',
-          backhand: '2 Mãos'
+          // Estrutura corrigida para o seu novo app.js
+          player_info: {
+            gender: gender,
+            play_style: 'Destro', // Valores padrão iniciais
+            backhand: '2 Mãos'
+          }
         }),
       });
 
@@ -56,12 +57,12 @@ export default function RegisterScreen() {
 
       if (response.ok) {
         Alert.alert("Sucesso!", "Sua conta foi criada com sucesso.");
-        router.replace('/login'); // Redireciona para o login
+        router.replace('/screens/login'); 
       } else {
-        Alert.alert("Erro no Cadastro", data.message || "Verifique os dados informados.");
+        // Usando data.msg conforme padronizado no seu app.js final
+        Alert.alert("Erro no Cadastro", data.msg || "Verifique os dados informados.");
       }
     } catch (error) {
-      console.error(error);
       Alert.alert("Erro de Conexão", "Não foi possível contatar o servidor.");
     } finally {
       setLoading(false);
@@ -82,10 +83,7 @@ export default function RegisterScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
         >
-          <ScrollView 
-            contentContainerStyle={styles.scrollContainer}
-            keyboardShouldPersistTaps="handled"
-          >
+          <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
             <View style={styles.header}>
               <Text style={styles.title}># Crie sua Conta</Text>
               <Text style={styles.subtitle}>Junte-se ao maior ranking de tênis!</Text>
@@ -104,6 +102,22 @@ export default function RegisterScreen() {
                 onChangeText={(val) => setFormData({...formData, email: val})} 
               />
 
+              {/* --- NOVO: Seletor de Gênero --- */}
+              <Text style={styles.label}>Gênero</Text>
+              <View style={styles.genderContainer}>
+                {['Masculino', 'Feminino'].map((item) => (
+                  <TouchableOpacity 
+                    key={item}
+                    style={[styles.genderOption, gender === item && styles.genderActive]}
+                    onPress={() => setGender(item)}
+                  >
+                    <Text style={[styles.genderText, gender === item && styles.genderTextActive]}>
+                      {item}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
               <MainInput 
                 placeholder="Senha" 
                 secureTextEntry={true}
@@ -117,10 +131,7 @@ export default function RegisterScreen() {
                   disabled={loading}
                 />
                 
-                <TouchableOpacity 
-                  style={styles.loginLink}
-                  onPress={() => router.push('/login')}
-                >
+                <TouchableOpacity style={styles.loginLink} onPress={() => router.push('/screens/login')}>
                   <Text style={styles.loginLinkText}>
                     Já tem conta? <Text style={styles.underline}>Entrar</Text>
                   </Text>
@@ -135,52 +146,32 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    width: '100%',
+  background: { flex: 1, width: '100%' },
+  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.85)' },
+  scrollContainer: { paddingHorizontal: 30, paddingBottom: 40, flexGrow: 1, justifyContent: 'center' },
+  header: { marginTop: 40, marginBottom: 20 },
+  title: { color: '#FFF', fontSize: 32, fontWeight: '900' },
+  subtitle: { color: '#CCC', fontSize: 16, marginTop: 5 },
+  form: { width: '100%' },
+  
+  // Estilos do Toggle de Gênero
+  label: { color: '#888', fontSize: 14, marginBottom: 10, fontWeight: '600', textTransform: 'uppercase' },
+  genderContainer: { flexDirection: 'row', gap: 10, marginBottom: 20 },
+  genderOption: { 
+    flex: 1, 
+    paddingVertical: 12, 
+    borderRadius: 10, 
+    backgroundColor: '#1A1A1A', 
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#333'
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.75)', 
-  },
-  scrollContainer: {
-    paddingHorizontal: 30,
-    paddingBottom: 40,
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  header: {
-    marginTop: 40,
-    marginBottom: 30,
-  },
-  title: {
-    color: '#FFF',
-    fontSize: 32,
-    fontWeight: '900',
-    lineHeight: 38,
-  },
-  subtitle: {
-    color: '#CCC',
-    fontSize: 16,
-    marginTop: 8,
-  },
-  form: {
-    width: '100%',
-  },
-  buttonContainer: {
-    marginTop: 20,
-    alignItems: 'center', // Garante a centralização do botão e do link inferior
-  },
-  loginLink: {
-    marginTop: 20,
-  },
-  loginLinkText: {
-    color: '#FFF',
-    fontSize: 14,
-  },
-  underline: {
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-    color: '#FF7A21', // Laranja da marca para destaque
-  },
+  genderActive: { backgroundColor: '#FF7A21', borderColor: '#FF7A21' },
+  genderText: { color: '#888', fontWeight: '700' },
+  genderTextActive: { color: '#FFF' },
+
+  buttonContainer: { marginTop: 20, alignItems: 'center' },
+  loginLink: { marginTop: 20 },
+  loginLinkText: { color: '#FFF', fontSize: 14 },
+  underline: { fontWeight: 'bold', textDecorationLine: 'underline', color: '#FF7A21' },
 });

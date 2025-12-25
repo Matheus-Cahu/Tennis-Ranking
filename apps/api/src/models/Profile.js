@@ -10,11 +10,6 @@ const ProfileSchema = new mongoose.Schema({
   },
   
   // Informações Físicas
-  gender: {
-    type: String,
-    enum: ['Masculino', 'Feminino', 'Outro'],
-    required: [true, 'O gênero é obrigatório']
-  },
   height: {
     type: Number, // Armazenado em cm
     required: false
@@ -28,12 +23,12 @@ const ProfileSchema = new mongoose.Schema({
   play_style: {
     type: String,
     enum: ['Destro', 'Canhoto'],
-    required: [true, 'O braço dominante é obrigatório']
+    required: [false, 'O braço dominante é obrigatório']
   },
   backhand: {
     type: String,
     enum: ['1 Mão', '2 Mãos'],
-    required: [true, 'O tipo de backhand é obrigatório']
+    required: [false, 'O tipo de backhand é obrigatório']
   },
 
   // Evolução e Nível
@@ -57,7 +52,6 @@ const ProfileSchema = new mongoose.Schema({
 // Middleware para atualizar a data de modificação sempre que o perfil for salvo
 ProfileSchema.pre('save', function(next) {
   this.last_updated = Date.now();
-  next();
 });
 
 module.exports = mongoose.model('Profile', ProfileSchema);
