@@ -76,7 +76,7 @@ export default function LoginScreen() {
               <View style={styles.buttonSpacer}>
                 <MainButton 
                   title="Entrar" 
-                  onPress={() => router.replace('/(tabs)/home')} // Redireciona para a área logada 
+                    onPress={() => router.replace('/(tabs)/Feed')} // Redireciona para a área logada 
                 />
               </View>
             </View>
