@@ -36,7 +36,7 @@ export default function RegisterScreen() {
 
     try {
       // Substitua pelo IP da sua máquina se testar em dispositivo físico (ex: 192.168.x.x)
-      const response = await fetch('http://192.168.12.28:3000/api/users/register', {
+      const response = await fetch('http://192.168.12.10:3000/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

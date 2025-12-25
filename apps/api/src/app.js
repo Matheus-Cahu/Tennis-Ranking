@@ -64,5 +64,32 @@ app.post('/api/users/login', async (req, res) => {
   }
 });
 
+app.get('/api/users', async (req, res) => {
+  try {
+    // Busca usuários ativos, ordenando pelos que têm mais pontos (Ranking)
+    const users = await User.find({ active: true })
+      .sort({ points: -1 }) 
+      .select('-password'); // Nunca envia a senha, mesmo criptografada
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+    res.status(500).json({ message: "Erro ao carregar ranking." });
+  }
+});
+
+// ROTA DE BUSCA POR ID (Para a tela de perfil de outros jogadores)
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+    
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao buscar detalhes do usuário." });
+  }
+});
+
+
 const PORT = 3000;
 app.listen(PORT, () => console.log(`🚀 Servidor na porta ${PORT}`));
