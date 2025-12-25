@@ -70,8 +70,8 @@ export default function FloatingMenu() {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 100, // Acima da barra de navegação
-    right: 30,
+    bottom: 20, // Acima da barra de navegação
+    right: 50,
     alignItems: 'flex-end',
   },
   mainButton: {

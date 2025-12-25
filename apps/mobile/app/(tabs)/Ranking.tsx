@@ -27,7 +27,7 @@ export default function RankingScreen() {
     { id: '5', name: 'Iga S', position: 2, bracket: 'B', gender: 'Feminino', image: 'https://i.pravatar.cc/150?u=9' },
   ];
 
-  const filters = ['Ranking Geral', 'Minha Chave / Grupos', 'Amigos'];
+  const filters = ['Ranking Geral', 'Minha Chave / Grupos'];
 
   const filteredPlayers = useMemo(() => {
     return players.filter(player => {
@@ -129,5 +129,5 @@ const styles = StyleSheet.create({
   searchIcon: { marginRight: 10 },
   searchInput: { flex: 1, color: '#FFF', fontSize: 16 },
   searchLabel: { color: '#888', fontSize: 14, marginTop: 15, marginBottom: 5 },
-  listContent: { paddingHorizontal: 20, paddingBottom: 100 }
+  listContent: { paddingHorizontal: 20, paddingBottom: 100 },
 });
